@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/models/moeda.dart';
+import 'package:myapp/pages/moeda_detalhes_page.dart';
 import 'package:myapp/repositories/moeda_repository.dart';
 import 'package:intl/intl.dart';
 
@@ -23,21 +24,34 @@ class _MoedasPageState extends State<MoedasPage> {
       return AppBar(
         toolbarHeight: 80,
         centerTitle: true,
-        title: const Text('Cripto Moedas'),
+        title: const Text('Cripto Moedas',
+            style: TextStyle(color: Colors.black87)),
       );
     } else {
       return AppBar(
         leading: IconButton(
             onPressed: () => setState(() => selecionada = []),
-            icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+            icon: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.black87,
+            )),
         title: Center(
-          child: Text('${selecionada.length.toString()} Selecionadas'),
+          child: Text('(${selecionada.length.toString()}) Selecionadas',
+              style: const TextStyle(color: Colors.black87)),
         ),
-        backgroundColor: Colors.yellow[50],
+        backgroundColor: Colors.yellow[500],
         toolbarHeight: 80,
         elevation: 1,
       );
     }
+  }
+
+  mostrarDetalhes(Moeda moeda) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MoedaDetalhesPage(moeda: moeda),
+        ));
   }
 
   @override
@@ -75,15 +89,16 @@ class _MoedasPageState extends State<MoedasPage> {
                       : selecionada.add(tabela[index])),
               selected: selecionada.contains(tabela[index]),
               selectedTileColor: Colors.indigo[50],
+              onTap: () => mostrarDetalhes(tabela[index]),
             );
           },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: 
-        selecionada.isNotEmpty
+        floatingActionButton: selecionada.isNotEmpty
             ? FloatingActionButton.extended(
                 onPressed: () {},
                 icon: const Icon(Icons.star),
+                backgroundColor: Colors.yellow,
                 label: const Text(
                   'FAVORITAR',
                   style:
