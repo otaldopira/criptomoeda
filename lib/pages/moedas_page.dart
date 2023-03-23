@@ -24,8 +24,10 @@ class _MoedasPageState extends State<MoedasPage> {
       return AppBar(
         toolbarHeight: 80,
         centerTitle: true,
-        title: const Text('Cripto Moedas',
-            style: TextStyle(color: Colors.black87)),
+        title: const Text(
+          'Cripto Moedas',
+          style: TextStyle(color: Colors.black87),
+        ),
       );
     } else {
       return AppBar(

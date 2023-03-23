@@ -18,6 +18,20 @@ class _MoedaDetalhesPageState extends State<MoedaDetalhesPage> {
   final _valor = TextEditingController();
   double quantidade = 0;
 
+  comprar() {
+    if (_form.currentState!.validate()) {
+      //Salvar compra
+
+      Navigator.pop(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Compra realizada com sucesso !'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,10 +58,12 @@ class _MoedaDetalhesPageState extends State<MoedaDetalhesPage> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Container(
-              margin: const EdgeInsets.only(bottom: 24),
+              margin: const EdgeInsets.only(bottom: 24, top: 14),
               alignment: AlignmentDirectional.center,
               child: Text(
-                '$quantidade ${widget.moeda.sigla}',
+                quantidade > 0
+                    ? '${quantidade.toStringAsFixed(2)} ${widget.moeda.sigla}'
+                    : '',
                 style: const TextStyle(fontSize: 20, color: Colors.teal),
               ),
             ),
@@ -68,7 +84,7 @@ class _MoedaDetalhesPageState extends State<MoedaDetalhesPage> {
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Informe o valor da compra';
-                } else if (double.parse(value) < 10.00) {
+                } else if (double.parse(value) < 10) {
                   return 'O valor mínimo da compra é R\$10,00';
                 }
                 return null;
@@ -82,6 +98,23 @@ class _MoedaDetalhesPageState extends State<MoedaDetalhesPage> {
               },
             ),
           ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            margin: const EdgeInsets.only(top: 24),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                comprar();
+              },
+              icon: const Icon(Icons.check),
+              label: const Padding(
+                padding: EdgeInsets.all(18.0),
+                child: Text(
+                  'Comprar',
+                  style: TextStyle(fontSize: 17),
+                ),
+              ),
+            ),
+          )
         ]),
       ),
     );
