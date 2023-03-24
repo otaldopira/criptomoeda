@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:myapp/models/moeda.dart';
 
 class MoedaDetalhesPage extends StatefulWidget {
-  Moeda moeda;
+  final Moeda moeda;
 
-  MoedaDetalhesPage({Key? key, required this.moeda}) : super(key: key);
+  const MoedaDetalhesPage({Key? key, required this.moeda}) : super(key: key);
 
   @override
   State<MoedaDetalhesPage> createState() => _MoedaDetalhesPageState();
@@ -82,6 +82,9 @@ class _MoedaDetalhesPageState extends State<MoedaDetalhesPage> {
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               validator: (value) {
+                // if (value == null) {
+                //   return null;
+                // }
                 if (value!.isEmpty) {
                   return 'Informe o valor da compra';
                 } else if (double.parse(value) < 10) {

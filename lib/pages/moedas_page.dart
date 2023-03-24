@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/models/moeda.dart';
 import 'package:myapp/pages/moeda_detalhes_page.dart';
+import 'package:myapp/repositories/favoritas_repository.dart';
 import 'package:myapp/repositories/moeda_repository.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class MoedasPage extends StatefulWidget {
   @override
@@ -19,23 +21,26 @@ class _MoedasPageState extends State<MoedasPage> {
 
   List<Moeda> selecionada = [];
 
+  late FavoritasRepository favoritas;
+
+  limparSelecionados() {
+    setState(() => selecionada = []);
+  }
+
   appBarDinamica() {
     if (selecionada.isEmpty) {
       return AppBar(
-        toolbarHeight: 80,
         centerTitle: true,
         title: const Text(
           'Cripto Moedas',
-          style: TextStyle(color: Colors.black87),
         ),
       );
     } else {
       return AppBar(
         leading: IconButton(
-            onPressed: () => setState(() => selecionada = []),
+            onPressed: () => limparSelecionados(),
             icon: const Icon(
               Icons.arrow_back_ios_new_rounded,
-              color: Colors.black87,
             )),
         title: Center(
           child: Text('(${selecionada.length.toString()}) Selecionadas',
@@ -58,6 +63,8 @@ class _MoedasPageState extends State<MoedasPage> {
 
   @override
   Widget build(BuildContext context) {
+    favoritas = context.watch<FavoritasRepository>();
+
     return Scaffold(
         appBar: appBarDinamica(),
         body: ListView.separated(
@@ -98,7 +105,10 @@ class _MoedasPageState extends State<MoedasPage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: selecionada.isNotEmpty
             ? FloatingActionButton.extended(
-                onPressed: () {},
+                onPressed: () {
+                  favoritas.saveAll(selecionada);
+                  limparSelecionados();
+                },
                 icon: const Icon(Icons.star),
                 backgroundColor: Colors.yellow,
                 label: const Text(
